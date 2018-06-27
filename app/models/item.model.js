@@ -10,26 +10,14 @@ module.exports = (sequelize, Sequelize) => {
         title: {
             type: Sequelize.STRING,
         },
-        postDate: {
+        post_date: {
             type: Sequelize.STRING,
         },
         link_embed: {
             type: Sequelize.TEXT,
         },
-        adcareerID: {
-            type: Sequelize.INTEGER
-        },
-        adpurposeID: {
-            type: Sequelize.INTEGER,
-        },
-        adtypeID: {
-            type: Sequelize.STRING
-        },
-        adbaseID: {
-            type: Sequelize.STRING,
-        }
     }, {
-        timestamps: false
-    });
+            timestamps: false
+        });
     return Item;
 }
