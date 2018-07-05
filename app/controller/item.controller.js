@@ -67,44 +67,44 @@ module.exports.postItem = (req, res) => {
             }).then((adcareer) => {
                 return adcareer.setItems(item);
             })
-            .catch(err => {
-                console.log(err);
-            })
-            .then(() => {
-                return AdPurpose.findOne({
-                    where: {
-                        ad_id: req.body.adpurposeID
-                    }
-                }).then((adpurpose) => {
-                   return adpurpose.setItems(item);
+                .catch(err => {
+                    console.log(err);
                 })
-            })
-            .catch(err => {
-                console.log(err);
-            })
-            .then(() => {
-                return AdType.findOne({
-                    where: {
-                        ad_id: req.body.adtypeID
-                    }
-                }).then((adtype) => {
-                   return adtype.setItems(item);
+                .then(() => {
+                    return AdPurpose.findOne({
+                        where: {
+                            ad_id: req.body.adpurposeID
+                        }
+                    }).then((adpurpose) => {
+                        return adpurpose.setItems(item);
+                    })
                 })
-            })
-            .catch(err => {
-                console.log(err);
-            })
-            .then(() => {
-                return AdBase.findOne({
-                    where: {
-                        ad_id: req.body.adbaseID
-                    }
-                }).then((adbase) => {
-                 return adbase.setItems(item);
+                .catch(err => {
+                    console.log(err);
                 })
-            }).catch(err => {
-                console.log(err);
-            })
+                .then(() => {
+                    return AdType.findOne({
+                        where: {
+                            ad_id: req.body.adtypeID
+                        }
+                    }).then((adtype) => {
+                        return adtype.setItems(item);
+                    })
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+                .then(() => {
+                    return AdBase.findOne({
+                        where: {
+                            ad_id: req.body.adbaseID
+                        }
+                    }).then((adbase) => {
+                        return adbase.setItems(item);
+                    })
+                }).catch(err => {
+                    console.log(err);
+                })
         })
         .then(() => {
             res.send('Item created')
@@ -124,9 +124,9 @@ module.exports.deleteItem = (req, res) => {
     }).then(() => {
         res.status(200).send("Item deleted");
     })
-    .catch(err => {
-        res.status(404).send(err);
-    });
+        .catch(err => {
+            res.status(404).send(err);
+        });
 }
 
 module.exports.updateItem = (req, res) => {
@@ -140,9 +140,12 @@ module.exports.updateItem = (req, res) => {
             thumb: req.body.thumb,
             title: req.body.title,
             link_embed: req.body.link_embed,
+        }).then(() => {
+            console.log("Item updated");
+            res.send("ok");
+        }).catch(err => {
+            res.status(404).send(err);
         })
-    }).then(() => {
-        res.send("Item updated")
     }).catch((err) => {
         res.status(404).send(err);
     })
