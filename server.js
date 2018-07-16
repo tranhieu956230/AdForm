@@ -3,8 +3,10 @@ const app = express();
 const bodyParser = require('body-parser');
 const routes = require('./app/controller/item.route');
 const path = require('path');
-const [name, port] = process.env.argv;
+const [name, port] = process.argv.slice(2);
+const cors = require('cors');
 
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 

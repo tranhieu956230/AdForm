@@ -1,8 +1,8 @@
 const env = {
-    user: '',
-    password: '',
-    database: '',
-    host: '',
+    user: 'hieu',
+    password: 'Hieu956230',
+    database: 'adform',
+    host: 'localhost',
     dialect: 'mysql',
     pool: {
         max: 5,

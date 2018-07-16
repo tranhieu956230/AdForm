@@ -11,35 +11,65 @@ module.exports.queryData = (req, res) => {
     const adtypeID = req.body.adtypeID;
     const adbaseID = req.body.adbaseID;
     var os = (req.body.page - 1) * 12;
-    var objc = {};
-    var objp = {};
-    var objt = {};
-    var objb = {};
-    if (adcareerID >= 1 && adcareerID != null && typeof adcareerID != "undefined") objc.ad_id = adcareerID;
-    if (adpurposeID >= 1 && adpurposeID != null && typeof adpurposeID != "undefined") objp.ad_id = adpurposeID;
-    if (adtypeID >= 1 && adtypeID != null && typeof adtypeID != "undefined") objt.ad_id = adtypeID;
-    if (adbaseID >= 1 && adbaseID != null && typeof adbaseID != "undefined") objb.ad_id = adbaseID;
-
-    Item.findAll({
-        attributes: ['id', 'link', 'thumb', 'title', 'post_date', 'link_embed'],
-        include: [{
+    let association = [];
+    if (adcareerID >= 1 && adcareerID != null && typeof adcareerID != "undefined") {
+        association.push({
             model: AdCareer,
-            where: objc,
-        }, {
+            where: {
+                ad_id: adcareerID,
+            }
+        })
+    }
+    if (adpurposeID >= 1 && adpurposeID != null && typeof adpurposeID != "undefined"){
+        association.push({
             model: AdPurpose,
-            where: objp,
-        }, {
+            where: {
+                ad_id: adpurposeID,
+            }
+        })
+    };
+    if (adtypeID >= 1 && adtypeID != null && typeof adtypeID != "undefined") {
+        association.push({
             model: AdType,
-            where: objt,
-        }, {
+            where: {
+                ad_id: adtypeID,
+            }
+        })
+    };
+    if (adbaseID >= 1 && adbaseID != null && typeof adbaseID != "undefined") {
+        association.push({
             model: AdBase,
-            where: objb,
-        }],
+            where: {
+                ad_id: adbaseID
+            }
+        })
+    };
+    console.log("--------------Association------------------");
+    console.log(association);
+    
+    
+    Item.findAndCountAll({
+        attributes: ['id', 'link', 'thumb', 'title', 'post_date', 'link_embed'],
+        include: association,
         offset: os,
         limit: 12,
-    }).then((items) => {
-        console.log(items);
-        res.json(items);
+    }).then((result) => {
+        let data = result.rows.map(obj => {
+            return Object.assign({}, {
+                id: obj.id,
+                link: obj.link,
+                title: obj.title,
+                thumb: obj.thumb,
+                post_date: obj.post_date,
+                link_embed: obj.link_embed,
+
+            })
+        })
+        const ret = {
+            pagin: Math.floor(result.count /12 )+ ((result.count % 12 === 0) ? 0 : 1),
+            data: data
+        }
+        res.json(ret);
     }).catch(err => {
         res.status(500).send(err);
     })
